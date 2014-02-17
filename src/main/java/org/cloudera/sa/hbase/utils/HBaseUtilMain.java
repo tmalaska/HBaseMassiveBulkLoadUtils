@@ -1,12 +1,13 @@
 package org.cloudera.sa.hbase.utils;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 public class HBaseUtilMain {
 	public static void main(String[] args) throws Exception {
 
-		
 		
 		if (args.length == 0) {
 			System.out.println("---");
@@ -49,5 +50,6 @@ public class HBaseUtilMain {
 		}else {
 			System.out.println("Unknown command:" + command);
 		}
+		
 	}
 }

@@ -9,6 +9,7 @@ import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.io.hfile.Compression;
 import org.apache.hadoop.hbase.regionserver.ConstantSizeRegionSplitPolicy;
+import org.apache.hadoop.hbase.regionserver.StoreFile.BloomType;
 import org.apache.hadoop.hbase.util.Bytes;
 
 public class CreateTable {
@@ -38,6 +39,7 @@ public class CreateTable {
 		
 		columnDescriptor.setCompressionType(Compression.Algorithm.SNAPPY);
 		columnDescriptor.setBlocksize(64 * 1024);
+		columnDescriptor.setBloomFilterType(BloomType.ROW);
 		
 		tableDescriptor.addFamily(columnDescriptor);
 		
@@ -70,7 +72,8 @@ public class CreateTable {
 			splitKeys[9] = Bytes.toBytes("9");
 
 			admin.createTable(tableDescriptor, splitKeys);
-		}
+		} 
+		
 		
 		
 		

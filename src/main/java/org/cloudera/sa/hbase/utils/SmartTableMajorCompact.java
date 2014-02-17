@@ -44,7 +44,7 @@ public class SmartTableMajorCompact {
 		table = new HTable(conf, Bytes.toBytes(tableName));
 	}
 	
-	public void compactSingleRegionPerRSThatNeedIt(int minStoreFiles) throws IOException, InterruptedException {
+	public void compactSingleRegionPerRSThatNeedIt(int minStoreFiles, String columnFamily) throws IOException, InterruptedException {
 		System.out.println("Table Name:" + tableName);
 	    
 	    for (HRegionInfo region: regions) {
@@ -66,14 +66,14 @@ public class SmartTableMajorCompact {
 	    		if (rs.getCompactionState(region.getRegionName()).equals("NONE") && storeFileList.size() > minStoreFiles) {
 	    			System.out.println(" !!! Compacting !!!");
 	    			//admin.compact(region.getRegionName());
-	    			rs.compactRegion(region, true);
+	    			rs.compactRegion(region, true, Bytes.toBytes(columnFamily));
 	    			
 	    		}
 	    	}
 	    }
 	}
 	
-	public void compactAllRegionPerRSThatNeedIt(int minStoreFiles) throws IOException, InterruptedException {
+	public void compactAllRegionPerRSThatNeedIt(int minStoreFiles, String columnFamily) throws IOException, InterruptedException {
 		System.out.println("Table Name:" + tableName);
 	    
 	    for (HRegionInfo region: regions) {
@@ -94,7 +94,7 @@ public class SmartTableMajorCompact {
 	    		
 	    		if ( storeFileList.size() > minStoreFiles) {
 	    			System.out.println(" !!! Compacting !!!");
-	    			rs.compactRegion(region, true);
+	    			rs.compactRegion(region, true, Bytes.toBytes(columnFamily));
 	    		}
 	    	}
 	    }
@@ -102,15 +102,16 @@ public class SmartTableMajorCompact {
 	
 	public static void main(String[] args) throws Exception {
 		if (args.length == 0) {
-			System.out.println("SmartTableMajorCompact {tableName} {minStoreFiles} {single or all}");
+			System.out.println("SmartTableMajorCompact {tableName} {columnFamily} {minStoreFiles} {single or all}");
 		}
 		SmartTableMajorCompact compactObj = new SmartTableMajorCompact(args[0]);
-		int minStoreFiles = Integer.parseInt(args[1]);
-		String mode = args[2];
+		String columnFamily = args[1];
+		int minStoreFiles = Integer.parseInt(args[2]);
+		String mode = args[3];
 		if (mode.equals("single")) {
-			compactObj.compactSingleRegionPerRSThatNeedIt(minStoreFiles);
+			compactObj.compactSingleRegionPerRSThatNeedIt(minStoreFiles, columnFamily);
 		} else {
-			compactObj.compactAllRegionPerRSThatNeedIt(minStoreFiles);
+			compactObj.compactAllRegionPerRSThatNeedIt(minStoreFiles, columnFamily);
 		}
 	}
 }

@@ -1,5 +1,7 @@
 package org.cloudera.sa.hbase.utils;
 
+import org.apache.commons.lang.StringUtils;
+
 public class TestScriptGen {
 	public static void main (String[] args) {
 		
@@ -19,6 +21,8 @@ public class TestScriptGen {
 			System.out.println("hadoop jar HBaseUtilMain.jar GetRateTest testTable 1000000 bl " + i + " 70 500 >> getRate.csv");
 			System.out.println("");
 		}
+		
+		
 		
 	}
 }
